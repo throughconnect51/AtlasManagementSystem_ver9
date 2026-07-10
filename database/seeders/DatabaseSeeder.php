@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Register your seeders here
+        // 作成したSeederを配列に登録する
         $this->call([
             SubjectsTableSeeder::class,
             UsersTableSeeder::class,

@@ -7,17 +7,21 @@ use Illuminate\Foundation\Http\FormRequest;
 class RegisterRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * リクエストのユーザーが承認されているか
      *
      * @return bool
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
+    /**
+     * バリデーション前にデータを加工・追加する
+     */
     protected function prepareForValidation()
     {
+        // 年月日がすべて選択されている場合、 Y-m-d 形式の文字列を作成してリクエストに追加
         if ($this->filled(['old_year', 'old_month', 'old_day'])) {
             $this->merge([
                 'birth_day' => sprintf('%04d-%02d-%02d', $this->old_year, $this->old_month, $this->old_day)
@@ -26,7 +30,7 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * バリデーションルール
      *
      * @return array<string, mixed>
      */

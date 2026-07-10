@@ -1,4 +1,5 @@
 <x-guest-layout>
+  
   <form action="{{ route('registerPost') }}" method="POST">
 
     @if ($errors->any())
