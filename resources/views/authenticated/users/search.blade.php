@@ -97,7 +97,8 @@
             <label>選択科目</label>
             @foreach($subjects as $subject)
               <div>
-                <input type="checkbox" name="subjects[]" value="{{ $subject->id }}" form="userSearchRequest" id="subject_{{ $subject->id }}">
+                <input type="checkbox" name="subjects[]" value="{{ $subject->id }}" form="userSearchRequest" id="subject_{{ $subject->id }}"
+                  @if(is_array(request('subjects')) && in_array($subject->id, request('subjects'))) checked @endif>
                 <label for="subject_{{ $subject->id }}">{{ $subject->subject }}</label>
               </div>
             @endforeach
