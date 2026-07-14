@@ -44,7 +44,7 @@
       <div>
         @if($user->role == 4)
         <span>選択科目 :</span>
-        {{-- 💡 生徒が選択している科目を表示 --}}
+        {{--生徒が選択している科目を表示 --}}
         @foreach($user->subjects as $subject)
           <span>{{ $subject->subject }}</span>
         @endforeach
