@@ -40,31 +40,44 @@ class CalendarView{
         $startDay = $this->carbon->copy()->format("Y-m-01");
         $toDay = $this->carbon->copy()->format("Y-m-d");
 
-        if($startDay <= $day->everyDay() && $toDay >= $day->everyDay()){
-          $html[] = '<td class="calendar-td">';
+        // 過去日判定（1日〜今日まで）
+        $isPast = ($startDay <= $day->everyDay() && $toDay >= $day->everyDay());
+
+        if($isPast){
+          $html[] = '<td class="calendar-td bg-light text-muted" style="background-color: #dfdfdf !important;">';
         }else{
           $html[] = '<td class="calendar-td '.$day->getClassName().'">';
         }
+        
         $html[] = $day->render();
 
+        // ログインユーザーが予約しているか判定
         if(in_array($day->everyDay(), $day->authReserveDay())){
           $reservePart = $day->authReserveDate($day->everyDay())->first()->setting_part;
-          if($reservePart == 1){
-            $reservePart = "リモ1部";
-          }else if($reservePart == 2){
-            $reservePart = "リモ2部";
-          }else if($reservePart == 3){
-            $reservePart = "リモ3部";
-          }
-          if($startDay <= $day->everyDay() && $toDay >= $day->everyDay()){
-            $html[] = '<p class="m-auto p-0 w-75" style="font-size:12px"></p>';
+          
+          $place = "リモート";
+          $partName = $reservePart . "部";
+          $buttonText = "リモ" . $reservePart . "部";
+
+          if($isPast){
+            $html[] = '<p class="m-auto p-0 w-75 text-dark" style="font-size:12px; font-weight:bold;">'.$reservePart.'部 参加</p>';
             $html[] = '<input type="hidden" name="getPart[]" value="" form="reserveParts">';
           }else{
-            $html[] = '<button type="submit" class="btn btn-danger p-0 w-75" name="delete_date" style="font-size:12px" value="'. $day->authReserveDate($day->everyDay())->first()->setting_reserve .'">'. $reservePart .'</button>';
+            $setting_part = $day->authReserveDate($day->everyDay())->first()->setting_part;
+            $html[] = '<button type="button" class="btn btn-danger p-0 w-75 js-modal-open"
+            data-date="'. $day->authReserveDate($day->everyDay())->first()->setting_reserve .'"
+            data-part="'. $setting_part .'" 
+            data-place="'. $place .'" 
+            data-part-name="'. $partName .'">'. $buttonText .'</button>';
             $html[] = '<input type="hidden" name="getPart[]" value="" form="reserveParts">';
           }
         }else{
-          $html[] = $day->selectPart($day->everyDay());
+          if($isPast){
+            $html[] = '<p class="m-auto p-0 w-75 text-muted" style="font-size:12px;">受付終了</p>';
+            $html[] = '<input type="hidden" name="getPart[]" value="" form="reserveParts">';
+          }else{
+            $html[] = $day->selectPart($day->everyDay());
+          }
         }
         $html[] = $day->getDate();
         $html[] = '</td>';
@@ -75,7 +88,6 @@ class CalendarView{
     $html[] = '</table>';
     $html[] = '</div>';
     $html[] = '<form action="/reserve/calendar" method="post" id="reserveParts">'.csrf_field().'</form>';
-    $html[] = '<form action="/delete/calendar" method="post" id="deleteParts">'.csrf_field().'</form>';
 
     return implode('', $html);
   }
