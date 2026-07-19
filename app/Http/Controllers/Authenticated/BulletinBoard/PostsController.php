@@ -17,24 +17,58 @@ class PostsController extends Controller
 {
     public function show(Request $request){
         $posts = Post::with('user', 'postComments')->get();
-        $categories = MainCategory::get();
+        // メインカテゴリー取得時に紐づくサブカテゴリーも一緒にロードしておく
+        $categories = MainCategory::with('subCategories')->get();
         $like = new Like;
         $post_comment = new Post;
+
+        // キーワード検索（部分一致&サブカテゴリー完全一致）
         if(!empty($request->keyword)){
-            $posts = Post::with('user', 'postComments')
-            ->where('post_title', 'like', '%'.$request->keyword.'%')
-            ->orWhere('post', 'like', '%'.$request->keyword.'%')->get();
-        }else if($request->category_word){
-            $sub_category = $request->category_word;
-            $posts = Post::with('user', 'postComments')->get();
-        }else if($request->like_posts){
+            $keyword = $request->keyword;
+
+            // 入力されたキーワードがサブカテゴリー名と完全一致するか確認
+            $subCategoryExists = SubCategory::where('sub_category', $keyword)->first();
+
+            if ($subCategoryExists) {
+                // 完全一致するサブカテゴリーが存在する場合、そのカテゴリーに属する投稿のみ取得
+                $posts = Post::with('user', 'postComments')
+                    ->where('post_category_id', $subCategoryExists->id)
+                    ->get();
+            } else {
+                // 一致しない場合は、通常のタイトル・本文の部分一致検索
+                $posts = Post::with('user', 'postComments')
+                    ->where('post_title', 'like', '%'.$keyword.'%')
+                    ->orWhere('post', 'like', '%'.$keyword.'%')
+                    ->get();
+            }
+        }
+        // サブカテゴリーをクリックした時の検索（完全一致）
+        else if($request->category_word){
+            $sub_category_name = $request->category_word;
+            
+            // クリックされた名前からサブカテゴリーのレコードを取得してIDで絞り込む
+            $subCategory = SubCategory::where('sub_category', $sub_category_name)->first();
+            
+            if ($subCategory) {
+                $posts = Post::with('user', 'postComments')
+                    ->where('post_category_id', $subCategory->id)
+                    ->get();
+            } else {
+                $posts = collect();
+            }
+        }
+        // 3. いいねした投稿の絞り込み
+        else if($request->like_posts){
             $likes = Auth::user()->likePostId()->get('like_post_id');
             $posts = Post::with('user', 'postComments')
-            ->whereIn('id', $likes)->get();
-        }else if($request->my_posts){
-            $posts = Post::with('user', 'postComments')
-            ->where('user_id', Auth::id())->get();
+                ->whereIn('id', $likes)->get();
         }
+        // 4. 自分の投稿の絞り込み
+        else if($request->my_posts){
+            $posts = Post::with('user', 'postComments')
+                ->where('user_id', Auth::id())->get();
+        }
+
         return view('authenticated.bulletinboard.posts', compact('posts', 'categories', 'like', 'post_comment'));
     }
 
