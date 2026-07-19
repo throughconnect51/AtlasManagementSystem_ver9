@@ -51,6 +51,7 @@ class PostsController extends Controller
     public function postCreate(PostFormRequest $request){
         $post = Post::create([
             'user_id' => Auth::id(),
+            'post_category_id' => $request->post_category_id,
             'post_title' => $request->post_title,
             'post' => $request->post_body
         ]);
@@ -69,18 +70,40 @@ class PostsController extends Controller
         Post::findOrFail($id)->delete();
         return redirect()->route('post.show');
     }
+    
     public function mainCategoryCreate(Request $request){
+        $request->validate([
+            'main_category_name' => 'required|string|max:100|unique:main_categories,main_category',
+        ]);
+
         MainCategory::create(['main_category' => $request->main_category_name]);
         return redirect()->route('post.input');
     }
 
     public function commentCreate(Request $request){
+        $request->validate([
+            'comment' => 'required|string|max:250',
+        ]);
+
         PostComment::create([
             'post_id' => $request->post_id,
             'user_id' => Auth::id(),
             'comment' => $request->comment
         ]);
         return redirect()->route('post.detail', ['id' => $request->post_id]);
+    }
+
+    public function subCategoryCreate(Request $request){
+        $request->validate([
+            'main_category_id' => 'required|exists:main_categories,id',
+            'sub_category_name' => 'required|string|max:100|unique:sub_categories,sub_category',
+        ]);
+
+        SubCategory::create([
+            'main_category_id' => $request->main_category_id,
+            'sub_category' => $request->sub_category_name,
+        ]);
+        return redirect()->route('post.input');
     }
 
     public function myBulletinBoard(){
