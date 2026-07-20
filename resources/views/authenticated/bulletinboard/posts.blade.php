@@ -38,13 +38,13 @@
             <p class="m-0 text-danger">
               <i class="fas fa-heart un_like_btn" post_id="{{ $post->id }}"></i>
               <!-- すでにいいねしている場合のいいね数を表示 -->
-              <span class="like_counts{{ $post->id }} ml-1 font-weight-bold small">{{ $post->likes->count() }}</span>
+              <span class="like_counts{{ $post->id }} ml-1 font-weight-bold small">{{ $post->likes()->count() }}</span>
             </p>
             @else
             <p class="m-0 text-secondary">
               <i class="fas fa-heart like_btn" post_id="{{ $post->id }}"></i>
-              <!-- まだいいねしていない場合のいいね数を表示 -->
-              <span class="like_counts{{ $post->id }} ml-1 font-weight-bold small">{{ $post->likes->count() }}</span>
+                <!-- まだいいねしていない場合のいいね数を表示 -->
+                <span class="like_counts{{ $post->id }} ml-1 font-weight-bold small">{{ $post->likes()->count() }}</span>
             </p>
             @endif
           </div>

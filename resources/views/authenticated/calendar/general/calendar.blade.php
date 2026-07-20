@@ -13,13 +13,13 @@
   </div>
 </div>
 
-<div class="modal js-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-  <div class="modal__bg js-modal-close" style="position: absolute; width: 100%; height: 100%;"></div>
-  <div class="modal__content" style="background: #fff; padding: 30px; border-radius: 8px; width: 450px; position: relative; z-index: 1001; margin: auto;">
+<div class="modal js-modal">
+  <div class="modal__bg js-modal-close"></div>
+  <div class="modal__content">
     <div class="p-3">
-      <p>予約日：<span class="modal-date-text" style="font-weight: bold;"></span></p>
-      <p>予約時間：<span class="modal-place-text" style="font-weight: bold;"></span>・<span class="modal-part-text" style="font-weight: bold;"></span></p>
-      <p class="mt-3">上記の予約をキャンセルしてもよろしいですか？</p>
+      <p class="mb-3">予約日：<span class="modal-date-text font-weight-bold"></span></p>
+      <p class="mb-3">予約時間：<span class="modal-place-text font-weight-bold"></span>・<span class="modal-part-text font-weight-bold"></span></p>
+      <p class="text-secondary mt-3 mb-0">上記の予約をキャンセルしてもよろしいですか？</p>
     </div>
     <div class="d-flex justify-content-between mt-4">
       <button type="button" class="btn btn-secondary js-modal-close">閉じる</button>

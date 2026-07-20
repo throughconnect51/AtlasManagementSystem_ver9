@@ -3,61 +3,61 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class RegisterRequest extends FormRequest
 {
-    /**
-     * リクエストのユーザーが承認されているか
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
     /**
-     * バリデーション前にデータを加工・追加する
+     * バリデーションの準備段階でのデータ処理
      */
     protected function prepareForValidation()
     {
-        // 年月日がすべて選択されている場合、 Y-m-d 形式の文字列を作成してリクエストに追加
-        if ($this->filled(['old_year', 'old_month', 'old_day'])) {
-            $this->merge([
-                'birth_day' => sprintf('%04d-%02d-%02d', $this->old_year, $this->old_month, $this->old_day)
-            ]);
-        }
+        $year = $this->old_year !== 'none' ? $this->old_year : null;
+        $month = $this->old_month !== 'none' ? $this->old_month : null;
+        $day = $this->old_day !== 'none' ? $this->old_day : null;
+
+        $this->merge([
+            'birth_date' => ($year && $month && $day) ? "{$year}-{$month}-{$day}" : null,
+        ]);
     }
 
     /**
      * バリデーションルール
-     *
-     * @return array<string, mixed>
      */
     public function rules()
     {
+        $today = Carbon::today()->format('Y-m-d');
+
         return [
-            'over_name' => ['required', 'string', 'max:10'],
-            'under_name' => ['required', 'string', 'max:10'],
-            // カタカナのみの判定に正規表現（regex）を使用
-            'over_name_kana' => ['required', 'string', 'max:30', 'regex:/^[ア-ンヴー]+$/u'],
-            'under_name_kana' => ['required', 'string', 'max:30', 'regex:/^[ア-ンヴー]+$/u'],
-            // usersテーブルのmail_addressカラムで重複チェック
-            'mail_address' => ['required', 'email', 'unique:users,mail_address', 'max:100'],
-            // 1:男性, 2:女性, 3:その他
-            'sex' => ['required', 'in:1,2,3'],
-            
-            // 生年月日の単体チェック（必須かつ数字）
-            'old_year' => ['required', 'numeric'],
-            'old_month' => ['required', 'numeric'],
-            'old_day' => ['required', 'numeric'],
-            // 合成した日付のチェック（2000年1月1日〜今日まで ＆ 正しい日付か）
-            'birth_day' => ['nullable', 'date', 'after_or_equal:2000-01-01', 'before_or_equal:today'],
-            
-            // 1:国語, 2:数学, 3:英語, 4:生徒
-            'role' => ['required', 'in:1,2,3,4'],
-            // confirmed をつけると自動的に password_confirmation と一致するかチェックします
-            'password' => ['required', 'string', 'min:8', 'max:30', 'confirmed'],
+            'over_name'       => 'required|string|max:10',
+            'under_name'      => 'required|string|max:10',
+            'over_name_kana'  => 'required|string|regex:/^[ア-ンヴー]+$/u|max:30',
+            'under_name_kana' => 'required|string|regex:/^[ア-ンヴー]+$/u|max:30',
+            'mail_address'    => 'required|email|unique:users,mail_address|max:100',
+            'sex'             => 'required|in:1,2,3', // 1:男性, 2:女性, 3:その他
+            'old_year'        => 'required|not_in:none',
+            'old_month'       => 'required|not_in:none',
+            'old_day'         => 'required|not_in:none',
+            'birth_date'      => "nullable|date|after_or_equal:2000-01-01|before_or_equal:{$today}",
+            'role'            => 'required|in:1,2,3,4', // 1~3:教師, 4:生徒
+            'password'        => 'required|string|min:8|max:30|confirmed', // confirmedによりpassword_confirmationと一致するかチェック
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'over_name_kana.regex' => '姓カナはカタカナで入力してください。',
+            'under_name_kana.regex' => '名カナはカタカナで入力してください。',
+            'birth_date.date' => '正しい日付を入力してください。',
+            'birth_date.after_or_equal' => '生年月日は2000年1月1日以降の日付を選択してください。',
+            'birth_date.before_or_equal' => '生年月日は今日までの日付を選択してください。',
+            'password.confirmed' => 'パスワードが確認用パスワードと一致しません。',
         ];
     }
 }

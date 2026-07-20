@@ -1,190 +1,203 @@
 <x-guest-layout>
-  
-  <form action="{{ route('registerPost') }}" method="POST">
-
-    @if ($errors->any())
-        <div class="alert alert-danger mt-3">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+  <div class="w-100 min-vh-100 d-flex flex-column justify-content-center align-items-center py-5" style="background-color: #ECF1F6;">
     
-    <div class="w-100 vh-100 d-flex" style="align-items:center; justify-content:center;">
-      <div class="w-25 vh-75 border p-3">
-        <div class="register_form">
-          <div class="d-flex mt-3" style="justify-content:space-between">
-            <div class="" style="width:140px">
-              <label class="d-block m-0" style="font-size:13px">姓</label>
-              <div class="border-bottom border-primary" style="width:140px;">
-                <input type="text" style="width:140px;" class="border-0 over_name" name="over_name">
+    <!-- 新規登録フォームカード -->
+    <div class="bg-white p-5 rounded shadow-sm border-0" style="width: 520px; max-width: 95%;">
+      <form action="{{ route('registerPost') }}" method="POST">
+        @csrf
+
+        <!-- 姓・名エリア -->
+        <div class="mb-4">
+          @error('over_name')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          @error('under_name')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+
+          <div class="d-flex" style="justify-content:space-between">
+            <div style="width:48%">
+              <label class="d-block m-0 text-secondary" style="font-size:13px">姓</label>
+              <div class="border-bottom border-primary w-100">
+                <input type="text" class="w-100 border-0 p-1 over_name" name="over_name" style="outline: none; box-shadow: none; background: transparent;">
               </div>
             </div>
-            <div class="" style="width:140px">
-              <label class=" d-block m-0" style="font-size:13px">名</label>
-              <div class="border-bottom border-primary" style="width:140px;">
-                <input type="text" style="width:140px;" class="border-0 under_name" name="under_name">
-              </div>
-            </div>
-          </div>
-          <div class="d-flex mt-3" style="justify-content:space-between">
-            <div class="" style="width:140px">
-              <label class="d-block m-0" style="font-size:13px">セイ</label>
-              <div class="border-bottom border-primary" style="width:140px;">
-                <input type="text" style="width:140px;" class="border-0 over_name_kana" name="over_name_kana">
-              </div>
-            </div>
-            <div class="" style="width:140px">
-              <label class="d-block m-0" style="font-size:13px">メイ</label>
-              <div class="border-bottom border-primary" style="width:140px;">
-                <input type="text" style="width:140px;" class="border-0 under_name_kana" name="under_name_kana">
+            <div style="width:48%">
+              <label class="d-block m-0 text-secondary" style="font-size:13px">名</label>
+              <div class="border-bottom border-primary w-100">
+                <input type="text" class="w-100 border-0 p-1 under_name" name="under_name" style="outline: none; box-shadow: none; background: transparent;">
               </div>
             </div>
           </div>
-          <div class="mt-3">
-            <label class="m-0 d-block" style="font-size:13px">メールアドレス</label>
-            <div class="border-bottom border-primary">
-              <input type="mail" class="w-100 border-0 mail_address" name="mail_address">
+        </div>
+
+        <!-- セイ・メイエリア -->
+        <div class="mb-4">
+          @error('over_name_kana')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          @error('under_name_kana')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+
+          <div class="d-flex" style="justify-content:space-between">
+            <div style="width:48%">
+              <label class="d-block m-0 text-secondary" style="font-size:13px">セイ</label>
+              <div class="border-bottom border-primary w-100">
+                <input type="text" class="w-100 border-0 p-1 over_name_kana" name="over_name_kana" style="outline: none; box-shadow: none; background: transparent;">
+              </div>
+            </div>
+            <div style="width:48%">
+              <label class="d-block m-0 text-secondary" style="font-size:13px">メイ</label>
+              <div class="border-bottom border-primary w-100">
+                <input type="text" class="w-100 border-0 p-1 under_name_kana" name="under_name_kana" style="outline: none; box-shadow: none; background: transparent;">
+              </div>
             </div>
           </div>
         </div>
-        <div class="mt-3">
-          <input type="radio" name="sex" class="sex" value="1">
-          <label style="font-size:13px">男性</label>
-          <input type="radio" name="sex" class="sex" value="2">
-          <label style="font-size:13px">女性</label>
-          <input type="radio" name="sex" class="sex" value="3">
-          <label style="font-size:13px">その他</label>
+
+        <!-- メールアドレス -->
+        <div class="mb-4">
+          @error('mail_address')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          <label class="m-0 d-block text-secondary" style="font-size:13px">メールアドレス</label>
+          <div class="border-bottom border-primary w-100">
+            <input type="email" class="w-100 border-0 p-1 mail_address" name="mail_address" style="outline: none; box-shadow: none; background: transparent;">
+          </div>
         </div>
-        <div class="mt-3">
-          <label class="d-block m-0 aa" style="font-size:13px">生年月日</label>
-          <select class="old_year" name="old_year">
-            <option value="none">-----</option>
-            <option value="1985">1985</option>
-            <option value="1986">1986</option>
-            <option value="1987">1987</option>
-            <option value="1988">1988</option>
-            <option value="1989">1989</option>
-            <option value="1990">1990</option>
-            <option value="1991">1991</option>
-            <option value="1992">1992</option>
-            <option value="1993">1993</option>
-            <option value="1994">1994</option>
-            <option value="1995">1995</option>
-            <option value="1996">1996</option>
-            <option value="1997">1997</option>
-            <option value="1998">1998</option>
-            <option value="1999">1999</option>
-            <option value="2000">2000</option>
-            <option value="2001">2001</option>
-            <option value="2002">2002</option>
-            <option value="2003">2003</option>
-            <option value="2004">2004</option>
-            <option value="2005">2005</option>
-            <option value="2006">2006</option>
-            <option value="2007">2007</option>
-            <option value="2008">2008</option>
-            <option value="2009">2009</option>
-            <option value="2010">2010</option>
-          </select>
-          <label style="font-size:13px">年</label>
-          <select class="old_month" name="old_month">
-            <option value="none">-----</option>
-            <option value="01">1</option>
-            <option value="02">2</option>
-            <option value="03">3</option>
-            <option value="04">4</option>
-            <option value="05">5</option>
-            <option value="06">6</option>
-            <option value="07">7</option>
-            <option value="08">8</option>
-            <option value="09">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-          </select>
-          <label style="font-size:13px">月</label>
-          <select class="old_day" name="old_day">
-            <option value="none">-----</option>
-            <option value="01">1</option>
-            <option value="02">2</option>
-            <option value="03">3</option>
-            <option value="04">4</option>
-            <option value="05">5</option>
-            <option value="06">6</option>
-            <option value="07">7</option>
-            <option value="08">8</option>
-            <option value="09">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
-            <option value="21">21</option>
-            <option value="22">22</option>
-            <option value="23">23</option>
-            <option value="24">24</option>
-            <option value="25">25</option>
-            <option value="26">26</option>
-            <option value="27">27</option>
-            <option value="28">28</option>
-            <option value="29">29</option>
-            <option value="30">30</option>
-            <option value="31">31</option>
-          </select>
-          <label style="font-size:13px">日</label>
+
+        <!-- 性別 -->
+        <div class="mb-4">
+          @error('sex')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          <div class="d-flex align-items-center flex-wrap" style="gap: 15px;">
+            <div class="d-flex align-items-center">
+              <input type="radio" name="sex" class="sex mr-1" value="1" id="sex_male">
+              <label for="sex_male" class="m-0" style="font-size:13px">男性</label>
+            </div>
+            <div class="d-flex align-items-center">
+              <input type="radio" name="sex" class="sex mr-1" value="2" id="sex_female">
+              <label for="sex_female" class="m-0" style="font-size:13px">女性</label>
+            </div>
+            <div class="d-flex align-items-center">
+              <input type="radio" name="sex" class="sex mr-1" value="3" id="sex_other">
+              <label for="sex_other" class="m-0" style="font-size:13px">その他</label>
+            </div>
+          </div>
         </div>
-        <div class="mt-3">
-          <label class="d-block m-0" style="font-size:13px">役職</label>
-          <input type="radio" name="role" class="admin_role role" value="1">
-          <label style="font-size:13px">教師(国語)</label>
-          <input type="radio" name="role" class="admin_role role" value="2">
-          <label style="font-size:13px">教師(数学)</label>
-          <input type="radio" name="role" class="admin_role role" value="3">
-          <label style="font-size:13px">教師(英語)</label>
-          <input type="radio" name="role" class="other_role role" value="4">
-          <label style="font-size:13px" class="other_role">生徒</label>
+
+        <!-- 生年月日 -->
+        <div class="mb-4">
+          @error('old_year')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          @error('old_month')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          @error('old_day')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          
+          <label class="d-block mb-1 text-secondary" style="font-size:13px">生年月日</label>
+          <div class="d-flex align-items-center flex-wrap" style="gap: 5px;">
+            <select class="old_year form-control d-inline-block p-1" name="old_year" style="width: auto; height: auto; min-width: 80px;">
+              <option value="none">-----</option>
+              @for ($i = 1985; $i <= 2010; $i++)
+                <option value="{{ $i }}">{{ $i }}</option>
+              @endfor
+            </select>
+            <span style="font-size:13px" class="mx-1">年</span>
+
+            <select class="old_month form-control d-inline-block p-1" name="old_month" style="width: auto; height: auto; min-width: 60px;">
+              <option value="none">-----</option>
+              @for ($i = 1; $i <= 12; $i++)
+                <option value="{{ sprintf('%02d', $i) }}">{{ $i }}</option>
+              @endfor
+            </select>
+            <span style="font-size:13px" class="mx-1">月</span>
+
+            <select class="old_day form-control d-inline-block p-1" name="old_day" style="width: auto; height: auto; min-width: 60px;">
+              <option value="none">-----</option>
+              @for ($i = 1; $i <= 31; $i++)
+                <option value="{{ sprintf('%02d', $i) }}">{{ $i }}</option>
+              @endfor
+            </select>
+            <span style="font-size:13px" class="mx-1">日</span>
+          </div>
         </div>
-        <div class="select_teacher d-none">
-          <label class="d-block m-0" style="font-size:13px">選択科目</label>
+
+        <!-- 役職 -->
+        <div class="mb-4">
+          @error('role')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          <label class="d-block mb-1 text-secondary" style="font-size:13px">役職</label>
+          <div class="d-flex align-items-center flex-wrap" style="gap: 15px;">
+            <div class="d-flex align-items-center">
+              <input type="radio" name="role" class="admin_role role mr-1" value="1" id="role_ja">
+              <label for="role_ja" class="m-0" style="font-size:13px">教師(国語)</label>
+            </div>
+            <div class="d-flex align-items-center">
+              <input type="radio" name="role" class="admin_role role mr-1" value="2" id="role_math">
+              <label for="role_math" class="m-0" style="font-size:13px">教師(数学)</label>
+            </div>
+            <div class="d-flex align-items-center">
+              <input type="radio" name="role" class="admin_role role mr-1" value="3" id="role_en">
+              <label for="role_en" class="m-0" style="font-size:13px">教師(英語)</label>
+            </div>
+            <div class="d-flex align-items-center">
+              <input type="radio" name="role" class="other_role role mr-1" value="4" id="role_student">
+              <label for="role_student" class="m-0 other_role" style="font-size:13px">生徒</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 選択科目 -->
+        <div class="select_teacher d-none mb-4 bg-light p-3 rounded">
+          <label class="d-block mb-2 font-weight-bold" style="font-size:13px">選択科目</label>
           @foreach($subjects as $subject)
-          <div class="">
-            <input type="checkbox" name="subject[]" value="{{ $subject->id }}">
-            <label>{{ $subject->subject }}</label>
+          <div class="form-check mb-1">
+            <input type="checkbox" name="subject[]" value="{{ $subject->id }}" id="subject_{{ $subject->id }}" class="form-check-input">
+            <label for="subject_{{ $subject->id }}" class="form-check-label" style="font-size:13px">{{ $subject->subject }}</label>
           </div>
           @endforeach
         </div>
-        <div class="mt-3">
-          <label class="d-block m-0" style="font-size:13px">パスワード</label>
-          <div class="border-bottom border-primary">
-            <input type="password" class="border-0 w-100 password" name="password">
+
+        <!-- パスワード -->
+        <div class="mb-4">
+          @error('password')
+            <span class="text-danger d-block small mb-1">{{ $message }}</span>
+          @enderror
+          <label class="d-block m-0 text-secondary" style="font-size:13px">パスワード</label>
+          <div class="border-bottom border-primary w-100">
+            <input type="password" class="w-100 border-0 p-1 password" name="password" style="outline: none; box-shadow: none; background: transparent;">
           </div>
         </div>
-        <div class="mt-3">
-          <label class="d-block m-0" style="font-size:13px">確認用パスワード</label>
-          <div class="border-bottom border-primary">
-            <input type="password" class="border-0 w-100 password_confirmation" name="password_confirmation">
+
+        <!-- 確認用パスワード -->
+        <div class="mb-4">
+          <label class="d-block m-0 text-secondary" style="font-size:13px">確認用パスワード</label>
+          <div class="border-bottom border-primary w-100">
+            <input type="password" class="w-100 border-0 p-1 password_confirmation" name="password_confirmation" style="outline: none; box-shadow: none; background: transparent;">
           </div>
         </div>
-        <div class="mt-5 text-right">
-          <input type="submit" class="btn btn-primary register_btn" disabled value="新規登録" onclick="return confirm('登録してよろしいですか？')">
+
+        <!-- 新規登録ボタン -->
+        <div class="text-right mt-4 mb-4">
+          <input type="submit" class="btn btn-primary px-4 register_btn" disabled value="新規登録" onclick="return confirm('登録してよろしいですか？')" style="font-size: 14px; border-radius: 4px;">
         </div>
-        <div class="text-center">
-          <a href="{{ route('loginView') }}">ログイン</a>
+
+        <!-- ログインリンク -->
+        <div class="text-center mt-3">
+          <a href="{{ route('loginView') }}" class="text-primary small" style="text-decoration: none;">ログインはこちら</a>
         </div>
-      </div>
-      {{ csrf_field() }}
+      </form>
     </div>
-  </form>
+
   </div>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="{{ asset('js/register.js') }}" rel="stylesheet"></script>
+  <script src="{{ asset('js/register.js') }}"></script>
 </x-guest-layout>

@@ -23,8 +23,17 @@ class Post extends Model
         return $this->hasMany('App\Models\Posts\PostComment');
     }
 
+    public function likes(){
+        return $this->hasMany('App\Models\Posts\Like', 'like_post_id');
+    }
+
     public function subCategories(){
-        // リレーションの定義
+        return $this->belongsToMany(
+            'App\Models\Categories\SubCategory', // 紐付ける相手のモデル
+            'post_sub_categories',               // 中間テーブルの名前
+            'post_id',                           // 中間テーブル内での自モデルのID
+            'sub_category_id'                    // 中間テーブル内での相手モデルのID
+        );
     }
 
     // コメント数

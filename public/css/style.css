@@ -18,10 +18,10 @@ li {
 
 /* サイドバー */
 .sidebar {
-  width: 150px;
+  width: 180px;
   height: 100vh;
   background-color: #03AAD2;
-  font-weight: bold;
+  padding-top: 20px;
 }
 
 .main-container {
@@ -29,55 +29,206 @@ li {
 }
 
 .sidebar p a {
-  color: #FFF;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+
+.sidebar p a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.sidebar-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    object-fit: contain;
 }
 
 /* トップページ */
+.top_area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.top_title {
+  font-size: 16px;
+  color: #494949;
+  font-weight: bold;
+}
+
+.profile_container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 150px;
+}
+
 .user_status {
-  border-radius: 10px;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
   background: #FFF;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.subject_edit_btn {
+  display: inline-block;
+  font-size: 14px;
+  color: #03AAD2 !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.subject_edit_btn .arrow-icon {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #03AAD2;
+  border-bottom: 2px solid #03AAD2;
+  transform: rotate(45deg);
+  margin-bottom: 4px;
+  transition: transform 0.3s ease;
+}
+
+.subject_edit_btn.is-active .arrow-icon {
+  transform: rotate(-135deg);
+  margin-bottom: -2px;
+}
+
+.subject_inner {
+  display: none;
 }
 
 /* スクール予約関連 */
-.day-blank {
-  background: #D3D3D3;
+
+.calendar table {
+  border-collapse: collapse;
+  border: 1px solid #E2E8F0 !important;
 }
 
-.day-sat {
-  color: #0000FF;
-}
-
-.day-sun {
-  color: #FF0000;
-}
-
-.past-day {
-  background: #EEE;
-}
-
-.calendar-td {
-  min-width: 100px;
-}
-
-.day_part {
+.calendar th {
+  padding: 12px !important;
+  font-size: 14px;
   color: #494949;
-  font-size: 12px;
+  border: 1px solid #E2E8F0 !important;
+  background-color: #FFF;
 }
 
-.adjust-table {
-  width: 70% !important;
+.calendar td {
+  height: 110px;
+  min-width: 100px;
+  position: relative;
+  padding: 35px 12px 8px 12px !important;
+  border: 1px solid #E2E8F0 !important;
+  vertical-align: top;
+}
+
+.calendar td p.day {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 11px;
+  color: #666;
+  margin: 0 !important;
+  font-weight: bold;
+}
+
+.calendar .day_part {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 2px !important;
+}
+
+.calendar .day_part a {
+  text-decoration: none;
+  color: #03AAD2;
+}
+.calendar .day_part a:hover {
+  text-decoration: underline;
+}
+
+.calendar .day_part span {
+  color: #666;
+}
+
+.day-sat p.day { color: #0000FF !important; }
+.day-sun p.day { color: #FF0000 !important; }
+
+.past-day, .day-blank {
+  background-color: #F5F5F5 !important;
+  color: #A0AEC0 !important;
 }
 
 .adjust-table td {
-  padding: 0 !important;
+  padding: 30px 8px 8px 8px !important;
+  vertical-align: top;
+  height: 110px;
+  position: relative;
 }
 
-.adjust-area p {
-  justify-content: space-around;
+.adjust-table td p {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 11px;
+  margin: 0 !important;
+  font-weight: bold;
 }
 
-.adjust-table-btn {
-  width: 70%;
+.adjust-table td.day-sat p { color: #0000FF !important; }
+.adjust-table td.day-sun p { color: #FF0000 !important; }
+.adjust-table td.past-day p { color: #999 !important; }
+
+.adjust-area {
+  margin-top: 0px;
+}
+
+.setting-part-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  font-size: 11px;
+  color: #494949;
+}
+
+.setting-part-wrap input {
+  width: 45px;
+  height: 20px;
+  text-align: right;
+  border: 1px solid #CBD5E0;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 11px;
+  transition: border-color 0.2s;
+}
+
+.setting-part-wrap input:focus {
+  border-color: #03AAD2;
+  outline: none;
+}
+
+.past-day .setting-part-wrap input {
+  background-color: #E2E8F0;
+  border: 1px solid #E2E8F0;
+  color: #718096;
+}
+
+.all_content p.text-center {
+  font-size: 15px !important;
 }
 
 /* モーダル */
@@ -86,7 +237,9 @@ li {
   height: 100vh;
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
+  z-index: 1050;
 }
 
 .modal__bg {
@@ -103,7 +256,10 @@ li {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 60%;
+  width: 90%;
+  max-width: 550px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* 掲示板 */
@@ -180,10 +336,6 @@ li {
   resize: none;
 }
 
-.edit-modal-btn {
-  justify-content: space-between;
-}
-
 /* 掲示板 コメント */
 .comment_container {
   background: #FFF;
@@ -241,39 +393,139 @@ li {
 .reserve_users_area {
   display: flex;
   flex-wrap: wrap;
-  width: 800px;
-  margin: 10px auto;
-  height: 80vh;
-  overflow: scroll;
-  padding: 10px;
-  background: #FFF;
-  border-radius: 5px;
+  width: 75% !important;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding: 15px;
+  background: transparent;
 }
 
-.reserve_users_area span {
-  font-size: 12px;
-}
 
 .one_person {
-  width: 250px;
-  height: 250px;
+  width: calc(25% - 16px);
+  min-width: 200px;
+  background: #FFF;
+  border: none !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  margin-bottom: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.search_conditions span {
+.one_person:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.user_card_item {
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #333;
+}
+
+.user_card_item:last-child {
+  margin-bottom: 0;
+}
+
+.search_area {
+  background: transparent;
+  border: none !important;
+}
+
+.search_box_inner {
+  background: transparent;
+}
+
+.search_side_title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #494949;
+  margin-bottom: 15px;
+}
+
+.search_conditions {
   cursor: pointer;
+  padding: 5px 0;
 }
 
 .search_conditions_inner {
   display: none;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+
+.reserve_users_area::-webkit-scrollbar {
+  width: 6px;
+}
+.reserve_users_area::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+.all_content p[style*="font-size"],
+.all_content .text-center {
+  font-size: 15px !important;
+}
+
+.calendar td p.day,
+.calendar td p[style*="position: absolute"],
+.adjust-table td p {
+  font-size: 10px !important;
+}
+
+.reserve-detail-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #494949;
+  margin-bottom: 15px;
+}
+
+.reserve-detail-container {
+  width: 100%;
   background: #FFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+  border: 1px solid #E2E8F0;
 }
 
-.subject_edit_btn {
-  font-size: 12px;
-  color: #0000FF;
-  cursor: pointer;
+.reserve-detail-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
 }
 
-.subject_inner {
-  display: none;
+.reserve-detail-table th {
+  background-color: #03AAD2 !important;
+  color: #FFF !important;
+  font-weight: bold;
+  padding: 12px;
+  font-size: 14px;
+  border: none !important;
+}
+
+.reserve-detail-table td {
+  padding: 14px 12px;
+  font-size: 13px;
+  color: #494949;
+  border: none !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+}
+
+.reserve-detail-table tr:last-child td {
+  border-bottom: none !important;
+}
+
+.reserve-detail-table tbody tr:nth-child(even) {
+  background-color: #EBF8FA !important; 
+}
+
+.reserve-detail-table tbody tr:nth-child(odd) {
+  background-color: #FFF !important;
 }

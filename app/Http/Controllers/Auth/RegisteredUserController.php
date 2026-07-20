@@ -40,11 +40,7 @@ class RegisteredUserController extends Controller
     {
         DB::beginTransaction();
         try{
-            $old_year = $request->old_year;
-            $old_month = $request->old_month;
-            $old_day = $request->old_day;
-            $data = $old_year . '-' . $old_month . '-' . $old_day;
-            $birth_day = date('Y-m-d', strtotime($data));
+            $birth_day = $request->birth_date;
             $subjects = $request->subject;
 
             $user_get = User::create([
@@ -56,17 +52,18 @@ class RegisteredUserController extends Controller
                 'sex' => $request->sex,
                 'birth_day' => $birth_day,
                 'role' => $request->role,
-                'password' => bcrypt($request->password)
+                'password' => Hash::make($request->password)
             ]);
-            if($request->role == 4){
+            
+            if($request->role == 4 && !empty($subjects)){
                 $user = User::findOrFail($user_get->id);
                 $user->subjects()->attach($subjects);
             }
             DB::commit();
-            return view('auth.login.login');
+            return redirect()->route('loginView');
         }catch(\Exception $e){
             DB::rollback();
-            return redirect()->route('loginView');
+            return redirect()->back()->withInput();
         }
     }
 }

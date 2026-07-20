@@ -23,8 +23,8 @@ class PostsController extends Controller
         $post_comment = new Post;
 
         // キーワード検索（部分一致&サブカテゴリー完全一致）
-        if(!empty($request->keyword)){
-            $keyword = $request->keyword;
+        if (!empty($request->keyword)) {
+                $keyword = $request->keyword;
 
             // 入力されたキーワードがサブカテゴリー名と完全一致するか確認
             $subCategoryExists = SubCategory::where('sub_category', $keyword)->first();
@@ -43,27 +43,22 @@ class PostsController extends Controller
             }
         }
         // サブカテゴリーをクリックした時の検索（完全一致）
-        else if($request->category_word){
+        else if (!empty($request->category_word)) {
             $sub_category_name = $request->category_word;
-            
-            // クリックされた名前からサブカテゴリーのレコードを取得してIDで絞り込む
-            $subCategory = SubCategory::where('sub_category', $sub_category_name)->first();
-            
-            if ($subCategory) {
-                $posts = Post::with('user', 'postComments')
-                    ->where('post_category_id', $subCategory->id)
-                    ->get();
-            } else {
-                $posts = collect();
-            }
+
+            $posts = Post::with('user', 'postComments')
+                ->whereHas('subCategories', function($q) use ($sub_category_name) {
+                $q->where('sub_category', $sub_category_name);
+            })->get();
         }
-        // 3. いいねした投稿の絞り込み
+
+        // いいねした投稿の絞り込み
         else if($request->like_posts){
             $likes = Auth::user()->likePostId()->get('like_post_id');
             $posts = Post::with('user', 'postComments')
                 ->whereIn('id', $likes)->get();
         }
-        // 4. 自分の投稿の絞り込み
+        // 自分の投稿の絞り込み
         else if($request->my_posts){
             $posts = Post::with('user', 'postComments')
                 ->where('user_id', Auth::id())->get();
@@ -85,10 +80,11 @@ class PostsController extends Controller
     public function postCreate(PostFormRequest $request){
         $post = Post::create([
             'user_id' => Auth::id(),
-            'post_category_id' => $request->post_category_id,
             'post_title' => $request->post_title,
             'post' => $request->post_body
         ]);
+        $post->subCategories()->attach($request->post_category_id);
+
         return redirect()->route('post.show');
     }
 
@@ -117,6 +113,10 @@ class PostsController extends Controller
     public function commentCreate(Request $request){
         $request->validate([
             'comment' => 'required|string|max:250',
+        ], [
+            'comment.required' => 'コメントは必ず入力してください。',
+            'comment.string'   => 'コメントは文字列である必要があります。',
+            'comment.max'      => 'コメントは250文字以内で入力してください。',
         ]);
 
         PostComment::create([
