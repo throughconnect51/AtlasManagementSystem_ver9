@@ -49,14 +49,48 @@ class RegisterRequest extends FormRequest
         ];
     }
 
+    /**
+     * エラーメッセージ
+     */
     public function messages()
     {
         return [
+            // 姓・名・カナ
+            'over_name.required' => '姓を入力してください。',
+            'over_name.max' => '姓は10文字以内で入力してください。',
+            'under_name.required' => '名を入力してください。',
+            'under_name.max' => '名は10文字以内で入力してください。',
+            'over_name_kana.required' => 'セイを入力してください。',
             'over_name_kana.regex' => '姓カナはカタカナで入力してください。',
+            'over_name_kana.max' => 'セイは30文字以内で入力してください。',
+            'under_name_kana.required' => 'メイを入力してください。',
             'under_name_kana.regex' => '名カナはカタカナで入力してください。',
+            'under_name_kana.max' => 'メイは30文字以内で入力してください。',
+
+            // メールアドレス
+            'mail_address.required' => 'メールアドレスを入力してください。',
+            'mail_address.email' => '正しいメールアドレスの形式で入力してください。',
+            'mail_address.unique' => 'このメールアドレスは既に登録されています。',
+            'mail_address.max' => 'メールアドレスは100文字以内で入力してください。',
+
+            // 性別・役職
+            'sex.required' => '性別を選択してください。',
+            'sex.in' => '正しい性別を選択してください。',
+            'role.required' => '役職を選択してください。',
+            'role.in' => '正しい役職を選択してください。',
+
+            // 生年月日
+            'old_year.not_in' => '年を選択してください。',
+            'old_month.not_in' => '月を選択してください。',
+            'old_day.not_in' => '日を選択してください。',
             'birth_date.date' => '正しい日付を入力してください。',
             'birth_date.after_or_equal' => '生年月日は2000年1月1日以降の日付を選択してください。',
             'birth_date.before_or_equal' => '生年月日は今日までの日付を選択してください。',
+
+            // パスワード
+            'password.required' => 'パスワードを入力してください。',
+            'password.min' => 'パスワードは8文字以上で入力してください。',
+            'password.max' => 'パスワードは30文字以内で入力してください。',
             'password.confirmed' => 'パスワードが確認用パスワードと一致しません。',
         ];
     }
